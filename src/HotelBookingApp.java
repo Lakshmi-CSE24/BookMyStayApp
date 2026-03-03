@@ -1,15 +1,18 @@
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * ==============================================================
  * Book My Stay App
- * UC2: Basic Room Types & Static Availability
+ * UC3: Centralized Room Inventory Management
  * ==============================================================
  *
- * Demonstrates abstraction, inheritance, and static availability.
+ * Demonstrates centralized inventory using HashMap.
  *
- * @version 2.0
+ * @version 3.0
  */
 
-// -------------------- ABSTRACT CLASS --------------------
+// -------------------- ABSTRACT ROOM --------------------
 abstract class Room {
 
     protected int numberOfBeds;
@@ -29,55 +32,76 @@ abstract class Room {
     }
 }
 
-// -------------------- SINGLE ROOM --------------------
+// -------------------- ROOM TYPES --------------------
 class SingleRoom extends Room {
-
     public SingleRoom() {
         super(1, 250, 1500.0);
     }
 }
 
-// -------------------- DOUBLE ROOM --------------------
 class DoubleRoom extends Room {
-
     public DoubleRoom() {
         super(2, 400, 2500.0);
     }
 }
 
-// -------------------- SUITE ROOM --------------------
 class SuiteRoom extends Room {
-
     public SuiteRoom() {
         super(3, 750, 5000.0);
     }
 }
 
+// -------------------- INVENTORY CLASS --------------------
+class RoomInventory {
+
+    private Map<String, Integer> roomAvailability;
+
+    public RoomInventory() {
+        roomAvailability = new HashMap<>();
+        initializeInventory();
+    }
+
+    private void initializeInventory() {
+        roomAvailability.put("Single", 5);
+        roomAvailability.put("Double", 3);
+        roomAvailability.put("Suite", 2);
+    }
+
+    public Map<String, Integer> getRoomAvailability() {
+        return roomAvailability;
+    }
+
+    public void updateAvailability(String roomType, int count) {
+        roomAvailability.put(roomType, count);
+    }
+}
+
 // -------------------- MAIN APPLICATION --------------------
-public class HotelBookingApp {
+public class BookMyStayApp {
 
     public static void main(String[] args) {
 
-        System.out.println("Hotel Room Initialization\n");
+        System.out.println("Hotel Room Inventory Status\n");
 
         Room singleRoom = new SingleRoom();
         Room doubleRoom = new DoubleRoom();
         Room suiteRoom = new SuiteRoom();
 
-        int singleAvailable = 5;
-        int doubleAvailable = 3;
-        int suiteAvailable = 2;
+        RoomInventory inventory = new RoomInventory();
 
         System.out.println("Single Room:");
         singleRoom.displayRoomDetails();
-        System.out.println("Available: " + singleAvailable + "\n");
+        System.out.println("Available Rooms: " +
+                inventory.getRoomAvailability().get("Single") + "\n");
 
         System.out.println("Double Room:");
         doubleRoom.displayRoomDetails();
-        System.out.println("Available: " + doubleAvailable + "\n");
+        System.out.println("Available Rooms: " +
+                inventory.getRoomAvailability().get("Double") + "\n");
 
         System.out.println("Suite Room:");
         suiteRoom.displayRoomDetails();
-        System.out.println("Available: " + suiteAvailable);
+        System.out.println("Available Rooms: " +
+                inventory.getRoomAvailability().get("Suite"));
     }
 }
